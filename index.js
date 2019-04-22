@@ -1,7 +1,7 @@
 const canvas = document.getElementById("canvas");
 const c = canvas.getContext("2d");
-const tx = window.innerWidth - 10;
-const ty = window.innerHeight - 20;
+const tx = window.innerWidth - 20;
+const ty = window.innerHeight - 30;
 canvas.width = tx;
 canvas.height = ty;
 
@@ -15,14 +15,13 @@ function Bar(height,width) {
     this.update = function() {
         c.fillStyle = this.color;
         c.fillRect(this.x,this.y,this.width,this.height);
-        c.fill();
     };
 }
-let bar = new Bar(20,200);
+let bar = new Bar(10,200);
 
 function Ball() {
     this.color = '#339CFF';
-    this.radius = 20;
+    this.radius = 10;
     this.x = canvas.width/2;
     this.y = canvas.height - bar.height - this.radius;
     this.dy = -5;
@@ -84,24 +83,32 @@ function move() {
     if (upPressed) {
         bal.x += bal.dx;
         bal.y += bal.dy;
-        if (bal.x < 0 || bal.x > canvas.width) bal.dx = -bal.dx;
-        if (bal.y < 0 || bal.y > canvas.height) bal.dy = -bal.dy;
-        else if (bal.y + bal.dy > canvas.height - bal.radius - bar.height) {
-            if (bal.x > bar.x && bal.x < bar.x + bar.x) {
+    }
+    if (bal.x - bal.radius < 0 || bal.x + bal.dx + bal.radius> canvas.width) bal.dx = -bal.dx;
+    if (bal.y - bal.radius < 0) bal.dy = -bal.dy;
+    if (bal.y + bal.radius + bal.dy > canvas.height - bar.height){
+        if (bal.y + bal.radius + bal.dy > canvas.height - bar.height) {
+            if (bal.x + bal.dx >= bar.x && bal.x + bal.dx < bar.x + bar.width) {
                 bal.dy = -bal.dy;
-            } else {
-                alert("GAME OVER");
-                document.location.reload();
-                clearInterval(interval);
             }
         }
     }
-        if (rightPressed && bar.x > canvas.width - bar.width) {
-            bar.x -= 15;
-        } else if (leftPressed && bar.x < 0) {
-            bar.x += 15;
+    if (bal.y + bal.radius> canvas.height){
+            alert("GAME OVER");
+            document.location.reload();
+            clearInterval(interval);
         }
+    if (rightPressed && bar.x > canvas.width - bar.width) {
+            bar.x -= 15;
+    } else if (leftPressed && bar.x < 0) {
+            bar.x += 15;
+    }
 }
-    interval = setInterval(move, 10);
+    interval = setInterval(move, 20);
 
+// else {
+//     alert("GAME OVER");
+//     document.location.reload();
+//     clearInterval(interval);
+// }
 
