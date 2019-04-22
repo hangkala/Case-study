@@ -11,7 +11,6 @@ function Bar(height,width) {
     this.width = width;
     this.y = canvas.height - this.height;
     this.x = (canvas.width - this.width)/2;
-    //console.log(this.x,this.y);// 623 / 617
     this.update = function() {
         c.fillStyle = this.color;
         c.fillRect(this.x,this.y,this.width,this.height);
@@ -26,7 +25,7 @@ function Ball() {
     this.y = canvas.height - bar.height - this.radius;
     this.dy = -5;
     this.dx = 5;
-    //this.vel = 10;
+    this.vel = 1.25;
     this.update = function() {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
@@ -37,6 +36,22 @@ function Ball() {
 }
 let bal = new Ball();
 
+function Brick(height, width) {
+    this.height = height;
+    this.width = width;
+    this.x = 0;
+    this.y = 0;
+    this.color = "#127F0C"
+    this.update = function () {
+        c.fillStyle = this.color;
+        c.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+
+let brik = [];
+for (i = 0; i < 10 ; i++){
+    brik.push(new Brick());
+}
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
@@ -72,6 +87,7 @@ function move() {
     c.clearRect(0, 0, tx, ty);
     bar.update();
     bal.update();
+    //brik.update();
 
     if (rightPressed) {
         bar.x += 15;
@@ -90,6 +106,7 @@ function move() {
         if (bal.y + bal.radius + bal.dy > canvas.height - bar.height) {
             if (bal.x + bal.dx >= bar.x && bal.x + bal.dx < bar.x + bar.width) {
                 bal.dy = -bal.dy;
+                bal.dx = bal.dx*bal.vel
             }
         }
     }
@@ -104,11 +121,7 @@ function move() {
             bar.x += 15;
     }
 }
-    interval = setInterval(move, 20);
+    interval = setInterval(move, 10);
 
-// else {
-//     alert("GAME OVER");
-//     document.location.reload();
-//     clearInterval(interval);
-// }
+
 
